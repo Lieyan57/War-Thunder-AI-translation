@@ -15,3 +15,18 @@
 ### 1.环境要求
 - Windows 操作系统（使用了 `win32gui`、`pynput` 等库）
 - Python 3.8 或更高版本
+
+### 2.编辑配置
+配置文件为`config.json`，要放在与程序相同的目录下。
+- API_KEY：从 DeepSeek 开放平台 获取。
+- MODEL：推荐 `deepseek-v4-flash` 速度更快，也可以使用别家的ai，但是我没做测试。
+- WINDOW_GEOMETRY：窗口大小和位置，格式 宽x高+X偏移+Y偏移。
+- WINDOW_ALPHA：透明度（0~1，0为全透明，1为不透明）。
+- TOGGLE_KEY：快捷键，支持 f1~f12 或 ctrl、alt 等组合（参考 pynput 键名）。
+
+### 3.常见问题
+Q: 启动后没有显示窗口或窗口空白？
+A: 检查游戏是否正常运行且已进入对战房间（聊天功能可用）。也可以手动访问 http://localhost:8111/gamechat?lastId=0 看是否有 JSON 数据返回。
+
+Q: 翻译失败，提示 API 密钥错误？
+A: 确认 config.json 中的 API_KEY 正确，并且 DeepSeek 账户有余额。尝试使用 curl 测试 API 连通性。
