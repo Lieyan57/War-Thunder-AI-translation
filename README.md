@@ -25,8 +25,10 @@
 - TOGGLE_KEY：快捷键，支持 f1~f12 或 ctrl、alt 等组合（参考 pynput 键名）。
 
 ### 3.常见问题
-Q: 启动后没有显示窗口或窗口空白？
+Q: 启动后没有显示窗口或窗口空白？  
+
 A: 检查游戏是否正常运行且已进入对战房间（聊天功能可用）。也可以手动访问 http://localhost:8111/gamechat?lastId=0 看是否有 JSON 数据返回。
 
-Q: 翻译失败，提示 API 密钥错误？
+Q: 翻译失败，提示 API 密钥错误？  
+
 A: 确认 config.json 中的 API_KEY 正确，并且 DeepSeek 账户有余额。尝试使用 curl 测试 API 连通性。
