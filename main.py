@@ -37,7 +37,7 @@ last_id = None
 last_time = None
 visible = True
 
-def clear_context():                            #重置
+def clear_context():
     global messages, chat_log, message_queue, last_id, last_time
     messages = [{"role": "system", "content": config['SYSTEM_PROMPT']}]
     chat_log = []
@@ -46,7 +46,7 @@ def clear_context():                            #重置
     last_time = None
     print("对话上下文已清空")
 
-def fetch_messages(window, status_label):       #游戏消息队列
+def fetch_messages(window, status_label):
     global last_id, last_time, message_queue
     while True:
         try:
@@ -55,7 +55,6 @@ def fetch_messages(window, status_label):       #游戏消息队列
                 rid = int(r['id'])
                 rtime = r['time']
                 if last_time is not None and rtime < last_time:
-                    # 会话重置
                     clear_context()
                     window.after(0, lambda: status_label.config(text="检测到对话重置，已清空上下文"))
                     continue
@@ -66,14 +65,13 @@ def fetch_messages(window, status_label):       #游戏消息队列
                         window.after(0, lambda: status_label.config(text="上下文已清空"))
                         continue
                     if not is_chinese_text(original_msg):
-                        # 添加到队列，按id排序
                         message_queue.append({"id": rid, "msg": original_msg, "time": rtime})
                         message_queue.sort(key=lambda x: x["id"])
                     last_id = rid
                     last_time = rtime
-        except:
-            time.sleep(0.1)  # 避免过于频繁请求
-            pass
+        except Exception as e:
+            print(f"fetch_messages 异常: {e}")
+        time.sleep(0.5)  # 降低请求频率
         
 def translate_messages(window, status_label, history_widget):
     global message_queue
@@ -121,7 +119,8 @@ def toggle_window():
 def on_press(key):
     toggle_key = getattr(keyboard.Key, config['TOGGLE_KEY'].lower(), None)
     if toggle_key and key == toggle_key:
-        toggle_window()
+        # 将 tkinter 操作调度到主线程执行
+        window.after(0, toggle_window)
 
 def is_chinese_text(text):
     text = text.strip()
@@ -130,7 +129,7 @@ def is_chinese_text(text):
     return bool(re.search(r'[\u4e00-\u9fff]', text))
 
 
-def translate_to_chinese(text): #ai翻译
+def translate_to_chinese(text):
     global messages
     messages.append({"role": "user", "content": config['TRANSLATE_PROMPT'].format(text=text)})
     response = client.chat.completions.create(
@@ -142,18 +141,16 @@ def translate_to_chinese(text): #ai翻译
 
     return translated
 
-def connect(url):  
-    response = requests.get(url)
-    if response.status_code == 200:
-        try:
+def connect(url):
+    try:
+        response = requests.get(url, timeout=5)
+        if response.status_code == 200:
             data = re.findall(r'\{.*?\}', response.text)
-            result_dict = json.loads(data[-1],strict=False)
-        except:
-             pass
-    else:
-        print("连接失败，请检查游戏运行情况")
-
-    return result_dict
+            if data:
+                return json.loads(data[-1], strict=False)
+    except Exception as e:
+        print(f"获取消息失败: {e}")
+    return None
 
 def update_history_text(widget):
     widget.config(state=tk.NORMAL)
@@ -164,9 +161,10 @@ def update_history_text(widget):
 
 if __name__ == "__main__":
     try:
+        # 创建穿透窗口
         window = tk.Tk()
         window.title("翻译窗口")
-        window.geometry(config['WINDOW_GEOMETRY'])  # 位置和大小
+        window.geometry(config['WINDOW_GEOMETRY'])  # 位置和大小，可调整
         window.attributes("-alpha", config['WINDOW_ALPHA'])  # 透明度
         window.attributes("-topmost", True)  # 总在前
         window.overrideredirect(True)  # 无边框
