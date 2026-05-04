@@ -2,10 +2,15 @@
     "API_KEY": "<替换为你的API密钥>",
     "BASE_URL": "https://api.deepseek.com",
     "MODEL": "deepseek-v4-flash",
-    "SYSTEM_PROMPT": "你是一个专业的翻译助手，专门帮助玩家翻译战争雷霆游戏中的聊天信息。请将输入的文本准确翻译为中文，保持原意和语气。如果遇到粗俗或歧视内容，请在翻译后添加说明性文本，如'[对该信息的解释]'，但不要回避翻译。",
+    "SYSTEM_PROMPT": "你是一个专业的翻译助手，专门帮助玩家翻译战争雷霆游戏中的聊天信息。请将输入的文本准确翻译为中文，保持原意和语气。如果遇到粗俗或歧视内容，不要回避翻译。如果内容不确定或有歧义，请在翻译后添加说明性文本，如'[对该信息的解释]'。",
     "TRANSLATE_PROMPT": "请翻译以下文本为中文：{text}",
     "HISTORY_MAX": 20,
-    "WINDOW_GEOMETRY": "400x200+500+100",
-    "WINDOW_ALPHA": 0.5,
-    "TOGGLE_KEY": "f3"
+    "WINDOW_GEOMETRY": "500x300+550+40",
+    "TOGGLE_KEY": "f3",
+    "TRANSPARENT_COLOR": "#000000",
+    "TEXT_COLOR": "#d0d0d0",
+    "OUTLINE_COLOR": "#000000",
+    "FONT_FAMILY": "微软雅黑",
+    "FONT_SIZE_LARGE": 12,
+    "FONT_SIZE": 12
 }
