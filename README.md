@@ -18,13 +18,36 @@
 - Windows 操作系统（使用了 `win32gui`、`pynput` 等库）
 - Python 3.8 或更高版本
 
-### 2.编辑配置
-配置文件为`config.json`，要放在与程序相同的目录下。
-- API_KEY：从 DeepSeek 开放平台 获取。
-- MODEL：推荐 `deepseek-v4-flash` 速度更快，也可以使用别家的ai，但是我没做测试。
-- WINDOW_GEOMETRY：窗口大小和位置，格式 宽x高+X偏移+Y偏移。
-- WINDOW_ALPHA：透明度（0~1，0为全透明，1为不透明）。
-- TOGGLE_KEY：快捷键，支持 f1~f12 或 ctrl、alt 等组合（参考 pynput 键名）。
+### 2. 编辑配置
+
+首次运行前，请在同级目录下创建 `config.json` 文件（若已通过发行版生成则直接编辑）。配置文件采用 JSON 格式，各字段说明如下：
+
+| 字段 | 类型 | 必填 | 说明 | 示例值 |
+|------|------|------|------|--------|
+| `API_KEY` | `string` | 是 | 你的 DeepSeek API 密钥。前往 [platform.deepseek.com](https://platform.deepseek.com) 获取。 | `"sk-xxxxxxxxxxxxxxxx"` |
+| `BASE_URL` | `string` | 是 | API 接口地址，使用 DeepSeek 官方或兼容端点。 | `"https://api.deepseek.com"` |
+| `MODEL` | `string` | 是 | 使用的模型名称（需与 API 服务商提供的模型一致）。 | `"deepseek-chat"` 或 `"deepseek-v4-flash"` |
+| `SYSTEM_PROMPT` | `string` | 是 | 系统提示词，定义 AI 的角色和行为准则。 | `"你是一个专业的翻译助手……"` |
+| `TRANSLATE_PROMPT` | `string` | 是 | 翻译每一条消息时发送给 AI 的提示模板，`{text}` 会被原始消息替换。 | `"请翻译以下文本为中文：{text}"` |
+| `HISTORY_MAX` | `int` | 是 | 界面中保留的翻译历史最大条数（超出后自动删除最早记录）。 | `20` |
+| `WINDOW_GEOMETRY` | `string` | 是 | 窗口初始大小与位置，格式为 `"宽x高+X坐标+Y坐标"`。 | `"500x300+550+40"` |
+| `TOGGLE_KEY` | `string` | 是 | 全局显示/隐藏窗口的热键（使用 `pynput` 支持的键名，小写）。 | `"f3"` |
+| `TRANSPARENT_COLOR` | `string` | 是 | 透明背景色的 RGB 十六进制值（推荐纯黑 `#000000`）。 | `"#000000"` |
+| `TEXT_COLOR` | `string` | 是 | 文本颜色（十六进制）。 | `"#d0d0d0"` |
+| `OUTLINE_COLOR` | `string` | 是 | 文字描边颜色（十六进制）。 | `"#000000"` |
+| `FONT_FAMILY` | `string` | 是 | 字体名称（需系统中已安装）。 | `"微软雅黑"` 或 `"SimHei"` |
+| `FONT_SIZE_LARGE` | `int` | 是 | 状态栏字体大小（像素）。 | `12` |
+| `FONT_SIZE` | `int` | 是 | 翻译历史正文的字体大小（像素）。 | `12` |
+
+#### 注意事项
+
+- 必须将 API_KEY 替换为你自己的密钥，否则程序无法连接 AI 接口。
+
+- TRANSPARENT_COLOR 与窗口背景色一致，可实现点击穿透效果，建议保持 #000000。
+
+- 热键支持常见键名（f1~f12、ctrl、alt、shift 等），但注意避免与游戏或其他系统热键冲突。
+
+- 修改配置文件后需要重启程序才能生效。
 
 ### 3.常见问题
 Q: 启动后没有显示窗口或窗口空白？  
@@ -34,3 +57,10 @@ A: 检查游戏是否正常运行且已进入对战房间（聊天功能可用�
 Q: 翻译失败，提示 API 密钥错误？  
 
 A: 确认 config.json 中的 API_KEY 正确，并且 DeepSeek 账户有余额。尝试使用 curl 测试 API 连通性。
+
+## 免责声明
+
+- 本工具仅供学习交流使用，严禁用于任何商业或非法目的。
+- 本工具仅读取游戏开放的本地 HTTP 接口，不修改游戏内存、不注入代码、不发送任何自动化指令。
+- 使用本工具可能违反游戏开发商的服务条款（如 Gaijin EULA 中关于“未经授权的连接”的规定）。开发者不承担因使用本工具导致的任何账号封禁、数据丢失或其他损失。
+- 请自行判断风险，并谨慎使用。
